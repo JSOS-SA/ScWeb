@@ -1,0 +1,109 @@
+/* ===============================================================
+ * ثيم النظام - هوية شركة مطارات جدة
+ * بيانات صرفة (CSS Variables) - لا تنسيق فعلي
+ * =============================================================== */
+
+:root {
+  /* الألوان الأساسية - مستوحاة من هوية شركة مطارات جدة */
+  --color-primary:        #0a3d62;  /* الكحلي - اللون الرئيسي */
+  --color-primary-dark:   #062842;
+  --color-primary-light:  #1e5a87;
+  --color-accent:         #c9a961;  /* الذهبي - لون التمييز */
+  --color-accent-dark:    #a58743;
+  --color-accent-light:   #ddc287;
+
+  /* خلفيات */
+  --bg-page:        #f5f6f8;
+  --bg-card:        #ffffff;
+  --bg-header:      var(--color-primary);
+  --bg-sidebar:     #1a2b3c;
+  --bg-disabled:    #e8eaed;
+  --bg-hover:       #eef3f8;
+
+  /* النصوص */
+  --text-primary:   #1a1d23;
+  --text-secondary: #4a5160;
+  --text-muted:     #8a92a3;
+  --text-on-dark:   #ffffff;
+  --text-on-accent: #1a1d23;
+
+  /* الحدود */
+  --border-default: #d6dae0;
+  --border-light:   #ebedf1;
+  --border-strong:  #b0b7c1;
+
+  /* ألوان الحالات */
+  --color-success:  #2e7d32;
+  --color-warning:  #ed6c02;
+  --color-alert:    #c62828;
+  --color-info:     #0277bd;
+  --color-pending:  #6a1b9a;
+  --color-normal:   #2e7d32;
+  --color-finished: #424242;
+
+  /* خلفيات الحالات الناعمة */
+  --bg-success:  #e8f5e9;
+  --bg-warning:  #fff3e0;
+  --bg-alert:    #ffebee;
+  --bg-info:     #e1f5fe;
+  --bg-pending:  #f3e5f5;
+
+  /* الخط */
+  --font-family-base:
+    'IBM Plex Sans Arabic',
+    'Tajawal',
+    'Noto Sans Arabic',
+    -apple-system, system-ui, sans-serif;
+  --font-family-mono:
+    'IBM Plex Mono', 'Consolas', monospace;
+
+  /* أحجام النصوص */
+  --font-size-xs:   12px;
+  --font-size-sm:   13px;
+  --font-size-base: 14px;
+  --font-size-md:   16px;
+  --font-size-lg:   18px;
+  --font-size-xl:   22px;
+  --font-size-xxl:  28px;
+
+  /* أوزان الخط */
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-bold:    700;
+
+  /* المسافات */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  12px;
+  --space-lg:  16px;
+  --space-xl:  24px;
+  --space-xxl: 32px;
+
+  /* نصف القطر (الزوايا) */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  /* الظلال */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 6px 18px rgba(0, 0, 0, 0.12);
+
+  /* الأبعاد */
+  --header-height:  60px;
+  --sidebar-width:  240px;
+  --container-max:  1600px;
+  --form-max:       720px;
+
+  /* الانتقالات */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease-in-out;
+
+  /* الطبقات (z-index) */
+  --z-base:    1;
+  --z-sticky:  10;
+  --z-overlay: 100;
+  --z-modal:   1000;
+  --z-toast:   2000;
+}
