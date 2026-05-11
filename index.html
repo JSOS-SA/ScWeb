@@ -6,38 +6,104 @@
   <title>برنامج حافلات صالة الحج | بوابة ١٤</title>
   <meta name="description" content="برنامج تسجيل ومتابعة حافلات الرحلات بنقطة فرز صالة الحج - شركة مطارات جدة">
 
-  <!-- ====== ملفات الثيم والتخطيط ====== -->
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="lib/tabulator.min.css">
 
-  <!-- ====== المكتبات الخارجية (محلية بالكامل) ====== -->
-  <!-- Dexie: غلاف IndexedDB -->
-  <script src="lib/dexie.min.js"></script>
-  <!-- SheetJS: قراءة ملفات الإكسل -->
-  <script src="lib/xlsx.full.min.js"></script>
-  <!-- HyperFormula: محرك الصيغ (يُحمل عند الحاجة) -->
-  <!-- Tabulator: الجداول التفاعلية (يُحمل عند الحاجة) -->
-  <!-- Paged.js: قوالب الطباعة (يُحمل عند الحاجة) -->
-</head>
+  <!-- ===== كاشف الأخطاء البصري ===== -->
+  <script>
+    window.__errors = [];
 
+    function showError(label, detail) {
+      window.__errors.push("[" + label + "] " + detail);
+      var box = document.getElementById('app-main') || document.body;
+      box.innerHTML =
+        '<div style="padding:20px;background:#ffe5e5;color:#8b0000;font-size:14px;direction:ltr;text-align:left;font-family:monospace;white-space:pre-wrap;border:2px solid #c00;margin:10px;">' +
+        '<strong style="font-size:18px;font-family:Tahoma;color:#000;">⚠ تشخيص الموقع</strong>\n\n' +
+        window.__errors.join('\n\n----\n\n') +
+        '</div>';
+    }
+
+    window.addEventListener('error', function(e) {
+      var src = e.filename || '?';
+      var line = (e.lineno || '?') + ':' + (e.colno || '?');
+      showError('خطأ JS',
+        (e.message || 'unknown') + '\nFile: ' + src + '\nLine: ' + line);
+    });
+
+    window.addEventListener('unhandledrejection', function(e) {
+      var reason = e.reason;
+      var msg = (reason && reason.message) ? reason.message : String(reason);
+      showError('Promise مرفوض', msg);
+    });
+  </script>
+
+  <script src="lib/dexie.min.js"
+          onerror="showError('فشل تحميل','lib/dexie.min.js لم يُحمّل')"></script>
+  <script src="lib/xlsx.full.min.js"
+          onerror="showError('فشل تحميل','lib/xlsx.full.min.js لم يُحمّل')"></script>
+</head>
 <body>
-  <!-- ====== الشريط العلوي ====== -->
+
   <header class="app-header" id="app-header"></header>
 
-  <!-- ====== الهيكل الرئيسي ====== -->
   <div class="app-shell">
-    <!-- الشريط الجانبي -->
     <aside class="app-sidebar" id="app-sidebar"></aside>
-
-    <!-- المحتوى الرئيسي -->
     <main class="app-main" id="app-main">
       <div class="loading">جارٍ تحضير النظام...</div>
     </main>
   </div>
 
-  <!-- ====== نقطة الدخول الرئيسية ====== -->
+  <!-- فحص بعد ٤ ثوانٍ: إن لم يكتمل main.js، اعرض السبب -->
+  <script>
+    setTimeout(function() {
+      var main = document.getElementById('app-main');
+      if (!main) return;
+
+      // إن كان main.js نجح، سيستبدل المحتوى
+      if (main.textContent.indexOf('جارٍ تحضير النظام') === -1) return;
+
+      // إن وصلنا هنا = توقف main.js
+      var diag = [];
+      diag.push('Dexie: ' + (window.Dexie ? '✓ محمّل' : '✗ مفقود'));
+      diag.push('XLSX: ' + (window.XLSX ? '✓ محمّل' : '✗ مفقود'));
+      diag.push('عدد الأخطاء: ' + window.__errors.length);
+
+      if (window.__errors.length === 0) {
+        diag.push('');
+        diag.push('لا أخطاء مرئية. الأرجح: ES module لم يتم تحميله');
+        diag.push('(مسار خاطئ أو ملف مفقود في js/...)');
+
+        // نختبر تحميل main.js بشكل صريح
+        fetch('js/main.js')
+          .then(function(r) {
+            diag.push('');
+            diag.push('GET js/main.js → HTTP ' + r.status);
+            if (r.status !== 200) {
+              showError('تشخيص', diag.join('\n'));
+            } else {
+              return r.text().then(function(txt) {
+                diag.push('حجم main.js: ' + txt.length + ' حرف');
+                // ابحث عن imports
+                var imports = txt.match(/import .+ from ['"]([^'"]+)['"]/g) || [];
+                diag.push('imports: ' + imports.length);
+                imports.slice(0, 8).forEach(function(s) { diag.push('  ' + s); });
+                showError('تشخيص', diag.join('\n'));
+              });
+            }
+          })
+          .catch(function(e) {
+            diag.push('');
+            diag.push('فشل fetch: ' + e.message);
+            showError('تشخيص', diag.join('\n'));
+          });
+      } else {
+        showError('تشخيص', diag.join('\n'));
+      }
+    }, 4000);
+  </script>
+
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
